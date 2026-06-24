@@ -1,0 +1,32 @@
+name: Build 6.1.176 (asteroids test)
+
+permissions:
+  contents: write
+  actions: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      feature_set:
+        description: "Feature Set"
+        type: choice
+        options:
+          - KSUN+SUSFS+BBG+NET+DS
+          - KSUN+SUSFS+BBG
+          - KSUN+SUSFS
+          - FULL
+        default: KSUN+SUSFS+BBG+NET+DS
+      use_latest_commits:
+        description: "Use branch tip for KernelSU and SUSFS instead of pinned commits"
+        type: boolean
+        default: true
+
+jobs:
+  build-176:
+    uses: ./.github/workflows/prepare.yml
+    with:
+      config_file: .github/config/android14-6.1-176.json
+      feature_set: ${{ inputs.feature_set || 'KSUN+SUSFS+BBG+NET+DS' }}
+      use_repo: true
+      use_latest_commits: ${{ inputs.use_latest_commits }}
+    secrets: inherit
